@@ -1,20 +1,21 @@
-# Welcome to DeepCPP: Integrating Multi-View Residue Graph and Protein Language Model for Cell-Penetrating Peptide Prediction via Global–Local Graph Aggregation and Cross-Attentive Fusion
-Cell-penetrating peptides (CPPs) enable intracellular delivery, but large-scale experimental discovery remains costly and slow. Existing computational predictors often rely on handcrafted sequence descriptors or protein language-model embeddings, leaving gaps in biophysical grounding and interpretability. In this study, we present DeepCPP, a dual-branch framework that integrates a biophysically informed, multi-view residue graph with ESM-2 sequence embeddings. Specifically, the graph branch encodes sequence neighborhood and physicochemical similarity via global–local aggregation with top-k subgraph focusing and gated broadcast, while the ESM branch provides context-aware representations. The two views are aligned and fused by cross-attention with an HSIC-based decorrelation term, and a Kolmogorov–Arnold network head enhances nonlinear separability. We also curate a new benchmark from CPPsite3 and adopt cluster-controlled splits to reduce leakage and enable credible generalization. Experimental results indicate that DeepCPP outperforms state-of-the-art CPP and peptide-function prediction methods. Interpretability analyses highlight charge clustering, oriented amphipathicity, and termini patterns, offering actionable guidance for rational design. Overall, DeepCPP provides an accurate, interpretable, and scalable pre-screening tool for CPP discovery.
+# Welcome to MVP-MP: a Multi-view Graph Learning Framework Augmented by Pathway-aware Representation Losses for Multi-label Metabolic Pathway Prediction
+Accurate inference of metabolic pathway categories for unannotated small molecules is a key step for pathway-centric metabolomics interpretation and is increasingly relevant to drug discovery and lead optimization. 
+In this study, we propose MVP-MP, a multi-view graph learning framework augmented by pathway-aware representation losses for multi-label metabolic pathway prediction. MVP-MP integrates a molecular graph branch and a fingerprint branch through a Bi-Gate fusion module for adaptive cross-view integration. In the graph branch, MVPool scores node importance from feature, structure, and diffusion perspectives, selects a top-$k$ induced subgraph, and performs subgraph-to-global refinement, enabling explicit substructure focusing and propagating substructure evidence into global representations. At the objective level, we train the model end to end with a multi-label classification loss together with two pathway-aware regularizers. A pathway-aware contrastive loss exploits label overlap to structure compound relations in the embedding space, while a prototype-aware loss forms pathway prototypes within each mini-batch to promote pathway-discriminative, pathway-centric embeddings. In performance evaluation, MVP-MP consistently outperforms existing state-of-the-art methods on the independent test set. Moreover, prototype-centered latent analysis and MVPool-driven substructure interpretation provide pathway-centric interpretability by linking predictions to enriched substructures and reusable pathway-associated chemotypes.
 
-![The workflow of this study](https://github.com/GGCL7/DeepCPP/blob/main/workflow.png)
+![The workflow of this study](https://github.com/GGCL7/MVP-MP/blob/main/workflow.png)
 
 
 ## 🔧 Installation instructions
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/GGCL7/DeepCPP.git
-cd DeepCPP
+git clone https://github.com/GGCL7/MVP-MP.git
+cd MVP-MP
 ```
 2. **Set up the Python environment**
 ```bash
-conda create -n deepcpp python=3.10
-conda activate deepcpp
+conda create -n mvpmp python=3.10
+conda activate mvpmp
 pip install -r requirements.txt
 ```
 ## Model Training
@@ -22,19 +23,21 @@ pip install -r requirements.txt
 Train the model from scratch:
 
 ```bash
-python train.py \
-  --train_fasta "Data/train.txt" \
-  --test_fasta  "Data/test.txt"  \
-  --esm_dir "ESM_pre_model" \
-  --esm_batch_size 32 --esm_use_fp16 \
-  --batch_size 128 --lr 5e-4 --wd 1e-4 --max_epochs 100 \
-  --use_weighted_ce --pos_alpha 1.8 \
-  --gnn_node_in 48 --gnn_edge_in 3 --use_kan \
-  --pH 7.4 --edge_mode hybrid --window 3 --knn_k 8 \
-  --save_path "best_model.pth" --seed 2025
+  python main.py \
+    --csv_path Data/kegg_dataset.csv \
+    --index_path Data/data_index.txt \
+    --num_labels 11 \
+    --batch_size 64 \
+    --epochs 200 \
+    --lr 1e-3 \
+    --seed 42 \
+    --lambda_contrast 0.7 \
+    --lambda_proto 0.4 \
+    --select_metric f1 \
+    --ckpt_path best_model.pth
 
 ```
-The training script will automatically save the model with the best validation **MCC** to `best_model.pth`.
+The training script will automatically save the model with the best validation **F1** to `best_model.pth`.
 
 ## Model Evaluation
 
@@ -46,25 +49,7 @@ python evaluation.py
 The script reports the following metrics:
 
 * Accuracy
-* Sensitivity
-* Specificity
-* Matthews Correlation Coefficient (MCC)
-* Area Under the Curve (AUC)
-
-
-## 🛠️ Using DeepCPP for Cell-penetrating peptides prediction
-
-```bash
-python predict.py \    
-    --test_fasta "Data/test.txt" \
-    --model_path "best_model.pth" \
-    --out_csv "predictions.csv"
-```
-## Output example:
-
-```bash
-id   : pos1
-prob  : 0.930378
-pred_label   : CPP
-
+* Precision
+* Recall
+* F1 score
 ```
