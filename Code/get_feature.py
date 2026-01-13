@@ -13,7 +13,7 @@ def extract_fingerprints(smiles: str) -> torch.Tensor:
 
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
-        raise ValueError("无法从SMILES生成分子对象，请检查输入的SMILES格式。")
+        raise ValueError("Unable to generate a molecular object from the SMILES. Please check the input SMILES format.")
 
 
     fp_maccs = np.array(AllChem.GetMACCSKeysFingerprint(mol), dtype=int)
