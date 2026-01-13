@@ -1,25 +1,3 @@
-#!/usr/bin/env python3
-"""
-Train a multi-label pathway predictor with Train/Val/Test split.
-- Train on Train split only
-- Select best checkpoint by a Val metric (default: F1)
-- Evaluate once on Test using the best Val checkpoint
-
-Usage example:
-  python train_split.py \
-    --csv_path /path/to/kegg_dataset.csv \
-    --index_path /path/to/data_index.txt \
-    --num_labels 11 \
-    --batch_size 64 \
-    --epochs 200 \
-    --lr 1e-3 \
-    --seed 42 \
-    --lambda_contrast 0.5 \
-    --lambda_proto 0.5 \
-    --select_metric f1 \
-    --ckpt_path best_model_by_val.pth
-"""
-
 import os
 import ast
 import json
