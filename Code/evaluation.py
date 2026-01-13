@@ -31,8 +31,8 @@ def load_split_indices(index_path: str):
 
 
 def main():
-    csv_path = "/Users/guanjiahui/Desktop/Metabolic Pathway/MVML-MPI-main/data/kegg_dataset.csv"
-    index_path = "/Users/guanjiahui/Desktop/Metabolic Pathway/MVML-MPI-main/data/data_index.txt"
+    csv_path = "Data/kegg_dataset.csv"
+    index_path = "Data/data_index.txt"
     checkpoint_path = "best_model.pth"
 
     num_labels = 11
