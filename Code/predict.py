@@ -1,10 +1,3 @@
-# predict.py
-# Usage example:
-#   python predict.py \
-#     --smiles "NC(=O)c1ccc[n+](C2OC(COP(=O)(O)OP(=O)(O)OCC3OC(n4cnc5c(N)ncnc54)C(O)C3O)C(O)C2O)c1" \
-#     --checkpoint best_model.pth \
-#     --threshold 0.5
-
 import argparse
 import sys
 from typing import Dict, Tuple
@@ -103,10 +96,6 @@ def main():
 
 
     print("========== Prediction ==========")
-    print(f"Device: {device}")
-    print(f"Checkpoint: {args.checkpoint}")
-    if best_epoch is not None:
-        print(f"Best epoch (from ckpt): {best_epoch}")
     print(f"SMILES: {args.smiles}")
     print(f"Threshold: {args.threshold:.3f}")
     print("================================\n")
