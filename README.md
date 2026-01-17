@@ -53,3 +53,28 @@ The script reports the following metrics:
 * Recall
 * F1 score
 
+## Prediction (Inference)
+
+Run prediction:
+
+```bash
+python predict.py \
+  --smiles "NC(=O)c1ccc[n+](C2OC(COP(=O)(O)OP(=O)(O)OCC3OC(n4cnc5c(N)ncnc54)C(O)C3O)C(O)C2O)c1" \
+  --checkpoint best_model.pth \
+  --threshold 0.5
+```
+Example output::
+
+```bash
+[00] Carbohydrate metabolism                       prob=0.0008  pred=0
+[01] Energy metabolism                             prob=0.9593  pred=1
+[02] Lipid metabolism                              prob=0.0010  pred=0
+[03] Nucleotide metabolism                         prob=0.0000  pred=0
+[04] Amino acid metabolism                         prob=0.0293  pred=0
+[05] Metabolism of other amino acids               prob=0.0055  pred=0
+[06] Glycan metabolism                             prob=0.0000  pred=0
+[07] Cofactors and vitamins                        prob=0.9271  pred=1
+[08] Terpenoids and polyketides metabolism         prob=0.0011  pred=0
+[09] Biosynthesis of other secondary metabolites   prob=0.0013  pred=0
+[10] Xenobiotics biodegradation and metabolism     prob=0.6966  pred=1
+```
